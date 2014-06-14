@@ -3,4 +3,11 @@ html, body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  background-color: #663399
+}
+
+canvas {
+  top: 0;
+  left: 0;
+  position: absolute;
 }
