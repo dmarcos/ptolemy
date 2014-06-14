@@ -1,4 +1,3 @@
-;
 (function() {
 
   // Oculus Rift Effect
@@ -25,13 +24,17 @@
   function createMediaPlayer(options) {
     self = this;
 
-    // create ThreeJS scene
-    scene = new THREE.Scene();
-
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
 
+    scene = new THREE.Scene();
+
     // create ThreeJS renderer and append it to our object
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({
+      devicePixelRatio: 1,
+      alpha: false,
+      clearColor: 0xffffff,
+      antialias: true
+    });
     renderer.autoClear = false;
     renderer.setClearColor(0xffffff, 1);
     effect = new THREE.OculusRiftEffect(renderer);
