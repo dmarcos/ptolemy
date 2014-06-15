@@ -3,6 +3,13 @@
 }
 
 @font-face {
+  font-family: 'FiraSansSC';
+  src: url('fonts/FiraSansSC-Light.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'FiraSans';
   src: url('fonts/FiraSans-Light.woff') format('woff');
   font-weight: normal;
@@ -10,14 +17,14 @@
 }
 
 html, body {
-  font-family: 'FiraSans', sans-serif;
+  font-family: 'FiraSansSC', sans-serif;
   height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
   font-size: 10px;
   overflow: hidden;
-  background-color: #663399
+  background-color: #663399;
 }
 
 canvas {
@@ -26,12 +33,48 @@ canvas {
   position: absolute;
 }
 
-.welcome-message {
-  position: absolute;
-  top: 50%;
-  left: 0;
+.welcome .welcome-message {
+  display: inline-block;
   width: 100%;
   text-align: center;
   color: #B8A1D0;
-  font-size: 2.5rem;
+  font-size: 3rem;
+  margin-bottom: 30px;
 }
+
+.welcome-message a:link{
+  color: #B8A1D0;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(204,153,204,0.3);
+ }
+
+.welcome-message a:visited{
+  color: #B8A1D0;
+  text-decoration: none;
+}
+
+.welcome {
+  position: absolute;
+  top: 15%;
+  left: calc(50% - 320px);
+  width: 640px;
+  height: 400px;
+}
+
+.welcome .ptolemy{
+  display: block;
+  margin: auto;
+  width: 279px;
+  height: 330px;
+}
+
+.welcome .quote{
+  font-family: 'FiraSans', serif;
+  display: block;
+  margin: auto;
+  width: 279px;
+  margin-top: 10px;
+  font-size: 1.7rem;
+  text-align: center;
+}
+

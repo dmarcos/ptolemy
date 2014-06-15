@@ -1,32 +1,40 @@
 <!DOCTYPE HTML>
 <html lang="en">
-	<head>
-		<title>Ptolemy 360 Video Player</title>
-		<meta charset="utf-8">
-		<link rel="stylesheet" type="text/css" href="style/ptolemy.css" />
-	</head>
-	<body data-photo-src="media/demo-photo.jpg">
-	<!-- <body data-video-src="overpass-2k.mp4"> -->
-		<div class="welcome-message">Drag and Drop your video or play the demo</div>
-		<script type="text/javascript" src="../lib/vr.js"></script>
-		<script type="text/javascript" src="../lib/Three.js"></script>
-		<script type="text/javascript" src="../lib/OculusRiftEffect.js"></script>
-		<script type="text/javascript" src="../src/ptolemy.js"></script>
+  <head>
+    <title>Ptolemy 360 Video Player</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="style/ptolemy.css" />
+  </head>
+  <body>
+    <div class="welcome">
+      <div class="welcome-message">drag and drop your video or
+        <a class="demo-link" href="#">try the demo</a></div>
+        <img class="ptolemy" src="media/ptolemy.jpg" />
+      <div class="quote">It goes from one wonder to another</div>
+    </div>
+    <script type="text/javascript" src="../lib/vr.js"></script>
+    <script type="text/javascript" src="../lib/Three.js"></script>
+    <script type="text/javascript" src="../lib/OculusRiftEffect.js"></script>
+    <script type="text/javascript" src="../src/ptolemy.js"></script>
 
-		<script type="text/javascript">
-			window.onload = function() {
-				if (!vr.isInstalled()) {
-      		//statusEl.innerText = 'NPVR plugin not installed!';
-      		alert('NPVR plugin not installed!');
-    		}
-		    vr.load(function(error) {
-		      if (error) {
-		        //statusEl.innerText = 'Plugin load failed: ' + error.toString();
-		        alert('Plugin load failed: ' + error.toString());
-		      }
-		      //window.ptolemy();
-		    });
-			};
-		</script>
-	</body>
+    <script type="text/javascript">
+      window.onload = function() {
+        if (!vr.isInstalled()) {
+          //statusEl.innerText = 'NPVR plugin not installed!';
+          alert('NPVR plugin not installed!');
+        }
+        vr.load(function(error) {
+          if (error) {
+            //statusEl.innerText = 'Plugin load failed: ' + error.toString();
+            alert('Plugin load failed: ' + error.toString());
+          }
+          document.querySelector('.demo-link').addEventListener("click", startDemo, false);
+          function startDemo() {
+            //PTOLEMY.displayMedia('media/demo-photo.jpg','photo', document.querySelector('body'));
+            PTOLEMY.displayMedia('media/overpass-2k.mp4', 'video', document.querySelector('body'));
+          }
+        });
+      };
+    </script>
+  </body>
 </html>

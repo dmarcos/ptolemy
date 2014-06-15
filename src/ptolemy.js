@@ -1,5 +1,7 @@
 (function() {
 
+  var PTOLEMY = window.PTOLEMY = {};
+
   // Oculus Rift Effect
   var effect;
 
@@ -17,11 +19,10 @@
   var lon;
   var fov;
 
-  window.ptolemy = function() {
-    createMediaPlayer();
-  };
+  PTOLEMY.displayMedia = displayMedia;
 
-  function createMediaPlayer(options) {
+  function displayMedia(mediaURL, type, el) {
+    type = type || 'video';
     self = this;
 
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
@@ -39,9 +40,9 @@
     renderer.setClearColor(0xffffff, 1);
     effect = new THREE.OculusRiftEffect(renderer);
 
-    document.querySelector('body').appendChild(renderer.domElement);
+    el.appendChild(renderer.domElement);
 
-    if (document.querySelector('body').getAttribute('data-photo-src')) {
+    if (type !== 'video') {
       photo = document.createElement('img');
     } else {
       // create off-dom video player
@@ -51,7 +52,7 @@
     }
 
     // create ThreeJS texture and high performance defaults
-    if (photo != false) {
+    if (type !== 'video') {
       texture = new THREE.Texture(photo);
     } else {
       texture = new THREE.Texture(video);
@@ -70,7 +71,7 @@
     mesh.scale.x = -1; // mirror the texture, since we're looking from the inside out
     scene.add(mesh);
 
-    if (video != false) {
+    if (type === 'video') {
       // attach video player event listeners
       video.addEventListener("ended", function(e) {
         console.log("video loaded");
@@ -106,11 +107,11 @@
       });
 
       // set the video src and begin loading
-      video.src = document.querySelector('body').getAttribute('data-video-src');
-    } else if (photo != false) {
+      video.src = mediaURL;
+    } else if (type !== 'video') {
       photo.onload = animate;
       photo.crossOrigin = 'anonymous';
-      photo.src = document.querySelector('body').getAttribute('data-photo-src');
+      photo.src = mediaURL;
     }
   }
 
