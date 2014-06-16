@@ -13,6 +13,7 @@
         <img class="ptolemy" src="media/ptolemy.jpg" />
       <div class="quote">It goes from one wonder to another</div>
     </div>
+    <div class="vr-content hidden"></div>
     <script type="text/javascript" src="../lib/vr.js"></script>
     <script type="text/javascript" src="../lib/Three.js"></script>
     <script type="text/javascript" src="../lib/OculusRiftEffect.js"></script>
@@ -26,7 +27,11 @@
           alert('NPVR plugin not installed!');
         }
         vr.load(function(error) {
-          var player = new PTOLEMY.Player(document.querySelector('body'));
+          var player = new PTOLEMY.Player(document.querySelector('.vr-content'));
+          player.onAnimationStarted = function() {
+            var vrContent = document.querySelector('.vr-content');
+            vrContent.classList.remove('hidden');
+          };
           if (error) {
             alert('Plugin load failed: ' + error.toString());
           }

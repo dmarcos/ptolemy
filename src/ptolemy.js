@@ -26,23 +26,24 @@
 
   PTOLEMY.Player.prototype.loadPhoto = function(photoURL) {
     if (!renderer) {
-      initPlayer(photoURL, 'photo', this.el);
+      this.init(photoURL, 'photo', this.el);
     } else {
-      loadMedia(photoURL, 'photo');
+      this.loadMedia(photoURL, 'photo');
     }
   };
 
   PTOLEMY.Player.prototype.loadVideo = function(videoURL) {
     if (!renderer) {
-      initPlayer(videoURL, 'video', this.el);
+      this.init(videoURL, 'video', this.el);
     } else {
-      loadMedia(videoURL, 'video');
+      this.loadMedia(videoURL, 'video');
     }
   };
 
-  function initPlayer(mediaURL, type, el) {
+  PTOLEMY.Player.prototype.init = function(mediaURL, type, el) {
+    var self = this;
+
     type = type || 'video';
-    self = this;
 
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
 
@@ -126,6 +127,9 @@
       video.addEventListener("canplaythrough", function(e) {
         video.play();
         animate();
+        if (self.onAnimationStarted) {
+          self.onAnimationStarted();
+        }
         console.log("playing");
       });
 
@@ -136,7 +140,21 @@
       photo.crossOrigin = 'anonymous';
       photo.src = mediaURL;
     }
-  }
+  };
+
+  PTOLEMY.Player.prototype.loadMedia = function(mediaURL, type) {
+    type = type || 'video';
+    if (renderer) {
+      if (type === 'video') {
+        video.pause();
+        video.src = mediaURL;
+        video.load();
+      } else {
+        material.map.image.src = mediaURL;
+      }
+      material.map.needsUpdate = true;
+    }
+  };
 
   function animate() {
     // set our animate function to fire next time a frame is ready
@@ -169,20 +187,6 @@
     // Poll VR, if it's ready.
     var polled = vr.pollState(vrstate);
     effect.render(scene, camera, polled ? vrstate : null);
-  }
-
-  function loadMedia(mediaURL, type) {
-    type = type || 'video';
-    if (renderer) {
-      if (type === 'video') {
-        video.pause();
-        video.src = mediaURL;
-        video.load();
-      } else {
-        material.map.image.src = mediaURL;
-      }
-      material.map.needsUpdate = true;
-    }
   }
 
 })();
