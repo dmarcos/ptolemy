@@ -33,7 +33,15 @@ canvas {
   position: absolute;
 }
 
-.welcome .welcome-message {
+.welcome {
+  position: absolute;
+  top: 15%;
+  left: calc(50% - 320px);
+  width: 640px;
+  height: 400px;
+}
+
+.welcome .message{
   display: inline-block;
   width: 100%;
   text-align: center;
@@ -42,23 +50,15 @@ canvas {
   margin-bottom: 30px;
 }
 
-.welcome-message a:link{
+.welcome .message a:link{
   color: #B8A1D0;
   text-decoration: none;
   border-bottom: 1px solid rgba(204,153,204,0.3);
  }
 
-.welcome-message a:visited{
+.welcome .message a:visited{
   color: #B8A1D0;
   text-decoration: none;
-}
-
-.welcome {
-  position: absolute;
-  top: 15%;
-  left: calc(50% - 320px);
-  width: 640px;
-  height: 400px;
 }
 
 .welcome .ptolemy{
@@ -78,3 +78,6 @@ canvas {
   text-align: center;
 }
 
+.welcome .message.hidden {
+  display: none;
+}

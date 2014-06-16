@@ -7,8 +7,9 @@
   </head>
   <body>
     <div class="welcome">
-      <div class="welcome-message">drag and drop your video or
+      <div class="message instructions">drag and drop your video or
         <a class="demo-link" href="#">try the demo</a></div>
+      <div class="message loading hidden">Loading Media...</div>
         <img class="ptolemy" src="media/ptolemy.jpg" />
       <div class="quote">It goes from one wonder to another</div>
     </div>
@@ -19,20 +20,51 @@
 
     <script type="text/javascript">
       window.onload = function() {
+        var instructions = document.querySelector('.message.instructions');
+        var loading = document.querySelector('.message.loading');
         if (!vr.isInstalled()) {
-          //statusEl.innerText = 'NPVR plugin not installed!';
           alert('NPVR plugin not installed!');
         }
         vr.load(function(error) {
+          var player = new PTOLEMY.Player(document.querySelector('body'));
           if (error) {
-            //statusEl.innerText = 'Plugin load failed: ' + error.toString();
             alert('Plugin load failed: ' + error.toString());
           }
           document.querySelector('.demo-link').addEventListener("click", startDemo, false);
           function startDemo() {
-            //PTOLEMY.displayMedia('media/demo-photo.jpg','photo', document.querySelector('body'));
-            PTOLEMY.displayMedia('media/overpass-2k.mp4', 'video', document.querySelector('body'));
+            // player.loadPhoto('media/demo-photo.jpg');
+            // player.loadVideo('media/overpass-clip.mp4');
+            // player.loadVideo('media/overpass-2k.mp4');
+            instructions.classList.toggle('hidden');
+            loading.classList.toggle('hidden');
+            player.loadVideo('media/test.webm');
           }
+
+          // Drag and drop event listeners
+          document.addEventListener('dragover', function(event) {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'copy';
+          }, false);
+
+          document.addEventListener('dragenter', function(event) {
+            document.body.style.opacity = 0.5;
+          }, false);
+
+          document.addEventListener('dragleave', function(event) {
+            document.body.style.opacity = 1;
+          }, false);
+
+          document.addEventListener('drop', function(event) {
+            event.preventDefault();
+
+            var reader = new FileReader();
+            reader.addEventListener('load', function(event) {
+              player.loadVideo(event.target.result);
+            }, false);
+
+            reader.readAsDataURL(event.dataTransfer.files[0]);
+            document.body.style.opacity = 1;
+          }, false);
         });
       };
     </script>

@@ -18,10 +18,29 @@
   var lat;
   var lon;
   var fov;
+  var vrstate = new vr.State();
 
-  PTOLEMY.displayMedia = displayMedia;
+  PTOLEMY.Player = function(el) {
+    this.el = el;
+  };
 
-  function displayMedia(mediaURL, type, el) {
+  PTOLEMY.Player.prototype.loadPhoto = function(photoURL) {
+    if (!renderer) {
+      initPlayer(photoURL, 'photo', this.el);
+    } else {
+      loadMedia(photoURL, 'photo');
+    }
+  };
+
+  PTOLEMY.Player.prototype.loadVideo = function(videoURL) {
+    if (!renderer) {
+      initPlayer(videoURL, 'video', this.el);
+    } else {
+      loadMedia(videoURL, 'video');
+    }
+  };
+
+  function initPlayer(mediaURL, type, el) {
     type = type || 'video';
     self = this;
 
@@ -47,8 +66,12 @@
     } else {
       // create off-dom video player
       video = document.createElement('video');
-      video.loop = true;
       video.muted = true;
+      // video.loop = true; // It doesn't work in chrome
+      video.addEventListener('ended', function () {
+          this.currentTime = 0;
+          this.play();
+        }, false);
     }
 
     // create ThreeJS texture and high performance defaults
@@ -74,7 +97,7 @@
     if (type === 'video') {
       // attach video player event listeners
       video.addEventListener("ended", function(e) {
-        console.log("video loaded");
+        console.log("video ended");
       });
 
       // Progress Meter
@@ -115,16 +138,6 @@
     }
   }
 
-  //Exposed functions
-  function play() {
-    //code to play media
-    video.play()
-  }
-
-  function loadVideo(videoFile) {
-    video.src = videoFile;
-  }
-
   function animate() {
     // set our animate function to fire next time a frame is ready
     requestAnimationFrame(animate);
@@ -139,8 +152,6 @@
     }
     render();
   }
-
-  var vrstate = new vr.State();
 
   function render() {
     lat = Math.max(-85, Math.min(85, lat));
@@ -160,31 +171,18 @@
     effect.render(scene, camera, polled ? vrstate : null);
   }
 
-  // Drag and drop event listeners
-  document.addEventListener('dragover', function(event) {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'copy';
-  }, false);
-
-  document.addEventListener('dragenter', function(event) {
-    document.body.style.opacity = 0.5;
-  }, false);
-
-  document.addEventListener('dragleave', function(event) {
-    document.body.style.opacity = 1;
-  }, false);
-
-  document.addEventListener('drop', function(event) {
-    event.preventDefault();
-
-    var reader = new FileReader();
-    reader.addEventListener('load', function(event) {
-      material.map.image.src = event.target.result;
+  function loadMedia(mediaURL, type) {
+    type = type || 'video';
+    if (renderer) {
+      if (type === 'video') {
+        video.pause();
+        video.src = mediaURL;
+        video.load();
+      } else {
+        material.map.image.src = mediaURL;
+      }
       material.map.needsUpdate = true;
-    }, false);
-
-    reader.readAsDataURL(event.dataTransfer.files[0]);
-    document.body.style.opacity = 1;
-  }, false);
+    }
+  }
 
 })();
